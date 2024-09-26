@@ -18,16 +18,27 @@ CREATE TABLE Sales (
     FOREIGN KEY (user_ID) REFERENCES Users(user_ID)
 );
 
+-- PRODUCTS TABLE --
+CREATE TABLE Products (
+    product_ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    product_Name VARCHAR(150) NOT NULL,
+    product_Type VARCHAR(50) NOT NULL,  -- Milk_Tea, Cold_Coffee, Hot_Coffee, etc.
+    medio_Price DECIMAL(4,2),  -- Price for Medio size (if applicable)
+    grande_Price DECIMAL(4,2),  -- Price for Grande size (if applicable)
+    single_Price DECIMAL(4,2),  -- Price for single-sized items (e.g., Hot Coffee, Premiums)
+    UNIQUE(product_Name, product_Type)
+);
+
 -- SALE ITEMS TABLE --
 CREATE TABLE Sale_Items (
     sale_Item_ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
-    sale_ID INT,  -- Foreign Key from Sales table
-    product_Type VARCHAR(50) NOT NULL,  -- Type: Milk_Tea, Cold_Coffee, etc.
-    product_Name VARCHAR(150) NOT NULL,  -- Name of the product
+    sale_ID INT NOT NULL,  -- Foreign Key from Sales table
+    product_ID INT NOT NULL,  -- Foreign Key from Products table
     quantity INT NOT NULL,
-    price DECIMAL(6,2) NOT NULL,  -- Price per item
+    price DECIMAL(6,2) NOT NULL,  -- Price per item (calculated based on size/quantity)
     total_Price DECIMAL(6,2) NOT NULL,  -- price * quantity
-    FOREIGN KEY (sale_ID) REFERENCES Sales(sale_ID)
+    FOREIGN KEY (sale_ID) REFERENCES Sales(sale_ID),
+    FOREIGN KEY (product_ID) REFERENCES Products(product_ID)
 );
 
 -- SALES REPORT TABLE --
